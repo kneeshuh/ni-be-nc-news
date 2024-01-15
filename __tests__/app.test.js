@@ -55,18 +55,15 @@ describe('/api/articles/:article_id', () => {
         return request(app).get('/api/articles/1')
         .expect(200)
         .then(({ body }) => {
-            const { article } = body
-            expect(article.length).toBe(1)
-            article.forEach((article) => {
-                expect(article).toHaveProperty('article_id')
-                expect(article).toHaveProperty('title')
-                expect(article).toHaveProperty('topic')
-                expect(article).toHaveProperty('author')
-                expect(article).toHaveProperty('body')
-                expect(article).toHaveProperty('created_at')
-                expect(article).toHaveProperty('votes')
-                expect(article).toHaveProperty('article_img_url')
-            })
+            const article = body.article
+            expect(article).toHaveProperty('article_id')
+            expect(article).toHaveProperty('title')
+            expect(article).toHaveProperty('topic')
+            expect(article).toHaveProperty('author')
+            expect(article).toHaveProperty('body')
+            expect(article).toHaveProperty('created_at')
+            expect(article).toHaveProperty('votes')
+            expect(article).toHaveProperty('article_img_url')
         })
     })
     test('404: sends appropriate error status and message when given valid but non-existent article_id', () => {
