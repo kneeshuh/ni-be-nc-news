@@ -14,7 +14,17 @@ afterAll(() => {
     return db.end()
 })
 
-describe('/api/topics', () => {
+describe('GET /invalid-file-path', () => {
+    test('404: responds with "not found" when given invalid path', () => {
+        return request(app).get('/api/toopics')
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.msg).toBe('not found')
+        })
+    })
+})
+
+describe('GET /api/topics', () => {
     test('GET: 200 responds with array of topic objects with slug and description properties', () => {
         return request(app).get('/api/topics')
         .expect(200)
@@ -27,16 +37,9 @@ describe('/api/topics', () => {
             })
         })
     })
-    test('404: responds with "not found" when given invalid path', () => {
-        return request(app).get('/api/toopics')
-        .expect(404)
-        .then(({ body }) => {
-            expect(body.msg).toBe('not found')
-        })
-    })
 })
 
-describe('/api', () => {
+describe('GET /api', () => {
     test('GET: 200 responds with object describing all available endpoints of API', () => {
         return request(app).get('/api')
         .expect(200)
