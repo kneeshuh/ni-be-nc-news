@@ -124,6 +124,14 @@ describe('/api/articles/:article_id/comments', () => {
             })
         })
     })
+    test('200: send appropriate status and empty array when there are no comments for existing article', () => {
+        return request(app).get('/api/articles/2/comments')
+        .expect(200)
+        .then(({ body }) => {
+            const { comments } = body
+            expect(comments).toEqual([])
+        })
+    })
     test('404: sends appropriate error status and message when given valid but non-existent article_id', () => {
         return request(app).get('/api/articles/25/comments')
         .expect(404)
@@ -138,4 +146,17 @@ describe('/api/articles/:article_id/comments', () => {
             expect(body.msg).toBe('bad request')
         })
     })
+    // test('POST: 201 inserts new comment into db and responds with the posted comment', () => {
+    //     const newComment = {
+    //         username: 'username',
+    //         body: 'this is a comment'
+    //     }
+    //     return request(app).post('/api/articles/1/comments')
+    //     .send(newComment)
+    //     .expect(201)
+    //     .then(({ body }) => {
+    //         const { comment } = body
+    //         expect(comment.article_id).toBe(1)
+    //     })
+    // })
 })
