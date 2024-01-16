@@ -1,8 +1,17 @@
 const { fetchCommentsByArticleId, insertCommentById } = require('../models/comments.models')
+const { checkIdExists } = require('../utils/check-id-exists')
 
 exports.getCommentsByArticleId = (req, res, next) => {
     const { article_id } = req.params
-    fetchCommentsByArticleId(article_id).then((comments) => {
+    const fetchCommentsQuery = fetchCommentsByArticleId(article_id)
+    const queries = [fetchCommentsQuery]
+    if (article_id) {
+        const articleIdExistsQuery = checkIdExists(article_id)
+        queries.push(articleIdExistsQuery)
+    }
+    Promise.all(queries)
+    .then((response) => {
+        const comments = response[0]
         res.status(200).send({ comments })
     })
     .catch((err) => {

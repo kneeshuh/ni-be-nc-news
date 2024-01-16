@@ -124,6 +124,14 @@ describe('/api/articles/:article_id/comments', () => {
             })
         })
     })
+    test('200: send appropriate status and empty array when there are no comments for existing article', () => {
+        return request(app).get('/api/articles/2/comments')
+        .expect(200)
+        .then(({ body }) => {
+            const { comments } = body
+            expect(comments).toEqual([])
+        })
+    })
     test('404: sends appropriate error status and message when given valid but non-existent article_id', () => {
         return request(app).get('/api/articles/25/comments')
         .expect(404)
