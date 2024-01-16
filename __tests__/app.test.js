@@ -105,3 +105,37 @@ describe('/api/articles', () => {
     })
 })
 
+describe('/api/articles/:article_id/comments', () => {
+    test('GET: 200 responds with an array of comment object with relevant article id', () => {
+        return request(app).get('/api/articles/1/comments')
+        .expect(200)
+        .then(({ body }) => {
+            const { comments } = body
+            expect(comments.length).toBe(11)
+            expect(comments).toBeSortedBy('created_at', { descending: true })
+            comments.forEach((comment) => {
+                expect(comment.article_id).toBe(1)
+                expect(comment).toHaveProperty('comment_id')
+                expect(comment).toHaveProperty('votes')
+                expect(comment).toHaveProperty('created_at')
+                expect(comment).toHaveProperty('author')
+                expect(comment).toHaveProperty('body')
+                expect(comment).toHaveProperty('article_id')
+            })
+        })
+    })
+    test('404: sends appropriate error status and message when given valid but non-existent article_id', () => {
+        return request(app).get('/api/articles/25/comments')
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.msg).toBe('not found')
+        })
+    })
+    test('400: send appropriate error status and message when given invalid article_id', () => {
+        return request(app).get('/api/articles/not-an-article-id/comments')
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.msg).toBe('bad request')
+        })
+    })
+})
