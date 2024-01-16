@@ -138,4 +138,17 @@ describe('/api/articles/:article_id/comments', () => {
             expect(body.msg).toBe('bad request')
         })
     })
+    // test('POST: 201 inserts new comment into db and responds with the posted comment', () => {
+    //     const newComment = {
+    //         username: 'username',
+    //         body: 'this is a comment'
+    //     }
+    //     return request(app).post('/api/articles/1/comments')
+    //     .send(newComment)
+    //     .expect(201)
+    //     .then(({ body }) => {
+    //         const { comment } = body
+    //         expect(comment.article_id).toBe(1)
+    //     })
+    // })
 })
