@@ -250,4 +250,11 @@ describe.only('/api/users', () => {
             })
         })
     })
+    test('GET: 404 responds with appropriate error status and message when given invalid path', () => {
+        return request(app).get('/api/uuserss')
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.msg).toBe('not found')
+        })
+    })
 })
