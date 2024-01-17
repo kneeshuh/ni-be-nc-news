@@ -83,12 +83,13 @@ describe('/api/articles/:article_id', () => {
     })
 })
 
-describe('/api/articles', () => {
+describe.only('/api/articles', () => {
     test('GET: 200 responds with array of article objects, each containing all relevant properties', () => {
         return request(app).get('/api/articles')
         .expect(200)
         .then(({ body }) => {
             const { articles } = body
+            console.log(body)
             expect(articles.length).toBe(13)
             expect(articles).toBeSortedBy('created_at', { descending: true })
             articles.forEach((article) => {
