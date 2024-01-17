@@ -1,6 +1,13 @@
 \c nc_news_test
 
-SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.article_id) AS comment_count FROM articles
-LEFT JOIN comments on comments.article_id = articles.article_id
-GROUP BY articles.article_id
-ORDER BY articles.created_at DESC;
+-- INSERT INTO comments (author, body, article_id) VALUES ('username', 'comment text', 2)
+-- RETURNING *
+
+-- DELETE FROM users WHERE username = 'username'
+-- SELECT * FROM users
+-- INSERT INTO users (username, name) VALUES ('username', 'username') RETURNING *
+INSERT INTO comments (author, body, article_id) VALUES ('username', 'comment text', 2) RETURNING *
+
+-- What I'm trying to insert doesn't exist on the users table (i.e. 'username' is not a user)
+-- Need to add to users table before being able to add a comment?
+-- Use joins for that?

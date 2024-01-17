@@ -83,13 +83,12 @@ describe('/api/articles/:article_id', () => {
     })
 })
 
-describe.only('/api/articles', () => {
+describe('/api/articles', () => {
     test('GET: 200 responds with array of article objects, each containing all relevant properties', () => {
         return request(app).get('/api/articles')
         .expect(200)
         .then(({ body }) => {
             const { articles } = body
-            console.log(body)
             expect(articles.length).toBe(13)
             expect(articles).toBeSortedBy('created_at', { descending: true })
             articles.forEach((article) => {
@@ -125,7 +124,7 @@ describe('/api/articles/:article_id/comments', () => {
             })
         })
     })
-    test('200: send appropriate status and empty array when there are no comments for existing article', () => {
+    test('GET: 200 send appropriate status and empty array when there are no comments for existing article', () => {
         return request(app).get('/api/articles/2/comments')
         .expect(200)
         .then(({ body }) => {
@@ -133,31 +132,53 @@ describe('/api/articles/:article_id/comments', () => {
             expect(comments).toEqual([])
         })
     })
-    test('404: sends appropriate error status and message when given valid but non-existent article_id', () => {
+    test('GET: 404 sends appropriate error status and message when given valid but non-existent article_id', () => {
         return request(app).get('/api/articles/25/comments')
         .expect(404)
         .then(({ body }) => {
             expect(body.msg).toBe('not found')
         })
     })
-    test('400: send appropriate error status and message when given invalid article_id', () => {
+    test('GET: 400 send appropriate error status and message when given invalid article_id', () => {
         return request(app).get('/api/articles/not-an-article-id/comments')
         .expect(400)
         .then(({ body }) => {
             expect(body.msg).toBe('bad request')
         })
     })
-    // test('POST: 201 inserts new comment into db and responds with the posted comment', () => {
-    //     const newComment = {
-    //         username: 'username',
-    //         body: 'this is a comment'
-    //     }
-    //     return request(app).post('/api/articles/1/comments')
-    //     .send(newComment)
-    //     .expect(201)
-    //     .then(({ body }) => {
-    //         const { comment } = body
-    //         expect(comment.article_id).toBe(1)
-    //     })
-    // })
+    test('POST: 201 inserts comment and return with newly added comment', () => {
+        return request(app).post('/api/articles/2/comments')
+        .send({
+            username: 'user',
+            body: 'comment text'
+        })
+        .expect(201)
+        .then(({ body }) => {
+            const { comment } =  body
+            expect(comment.author).toBe('user')
+            expect(comment.body).toBe('comment text')
+        })
+    })
+    test('POST: 400 sends appropriate error status and message when given invalid article_id', () => {
+        return request(app).post('/api/articles/not-an-article-id/comments')
+        .send({
+            username: 'user',
+            body: 'comment text'
+        })
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.msg).toBe('bad request')
+        })
+    })
+    test('POST: 404 send appropriate error status and message when given valid but non-existent article_id', () => {
+        return request(app).post('/api/articles/25/comments')
+        .send({
+            username: 'user',
+            body: 'comment text'
+        })
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.msg).toBe('not found')
+        })
+    })
 })
