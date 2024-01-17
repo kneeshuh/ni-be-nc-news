@@ -242,6 +242,7 @@ describe.only('/api/users', () => {
         .expect(200)
         .then(({ body }) => {
             const { users } = body
+            console.log(users)
             expect(users.length).toBe(4)
             users.forEach((user) => {
                 expect(user).toHaveProperty('username')
