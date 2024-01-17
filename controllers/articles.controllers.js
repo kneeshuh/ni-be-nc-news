@@ -1,4 +1,4 @@
-const { fetchArticleById, fetchAllArticles } = require('../models/articles.models')
+const { fetchArticleById, fetchAllArticles, updateVotesByArticleId } = require('../models/articles.models')
 
 exports.getArticleById = (req, res, next) => {
     const { article_id } = req.params
@@ -13,6 +13,17 @@ exports.getArticleById = (req, res, next) => {
 exports.getAllArticles = (req, res, next) => {
     fetchAllArticles().then((articles) => {
         res.status(200).send({ articles })
+    })
+    .catch((err) => {
+        next(err)
+    })
+}
+
+exports.patchVotesByArticleId = (req, res, next) => {
+    const votesIncrement = req.body;
+    const { article_id } = req.params;
+    updateVotesByArticleId(votesIncrement, article_id).then((article) => {
+        res.status(200).send({ article })
     })
     .catch((err) => {
         next(err)

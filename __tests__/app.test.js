@@ -5,6 +5,7 @@ const testData = require('../db/data/test-data/index')
 const fs = require('fs/promises')
 const allEndpoints = require('../endpoints.json')
 const app = require('../app')
+const { brotliDecompressSync } = require('zlib')
 
 beforeEach(() => {
     return seed(testData)
@@ -76,6 +77,38 @@ describe('/api/articles/:article_id', () => {
     })
     test('GET: 400 send appropriate error status and message when given invalid article_id', () => {
         return request(app).get('/api/articles/not-an-article-id')
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.msg).toBe('bad request')
+        })
+    })
+    test('PATCH: 200 sends appropriate status code and responds with the updated article', () => {
+        return request(app).patch('/api/articles/3')
+        .send({
+            inc_votes: -99
+        })
+        .expect(200)
+        .then(({ body }) => {
+            const { article } = body
+            expect(article.article_id).toBe(3)
+            expect(article.votes).toBe(-99)
+        })
+    })
+    test('PATCH: 404 sends appropriate error code and message when given valid id but non-existent article', () => {
+        return request(app).patch('/api/articles/25')
+        .send({
+            inc_votes: 1
+        })
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.msg).toBe('not found')
+        })
+    })
+    test('PATCH: 400 send appropriate error code and message when given invalid id', () => {
+        return request(app).patch('/api/articles/not-an-article-id')
+        .send({
+            inc_votes: 100
+        })
         .expect(400)
         .then(({ body }) => {
             expect(body.msg).toBe('bad request')
