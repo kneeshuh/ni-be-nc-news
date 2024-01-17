@@ -12,27 +12,11 @@ exports.fetchArticleById = (article_id) => {
 }
 
 exports.fetchAllArticles = () => {
-    const commentCount = db.query(`SELECT article_id, COUNT(article_id) FROM comments GROUP BY article_id;`).then(({rows}) => {
+    return db.query(`SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.article_id) AS comment_count FROM articles
+    LEFT JOIN comments on comments.article_id = articles.article_id
+    GROUP BY articles.article_id
+    ORDER BY articles.created_at DESC;`)
+    .then(({ rows }) => {
         return rows
-    })
-    const articles = db.query(`SELECT * FROM articles ORDER BY created_at DESC`).then(({rows}) => {
-        return rows
-    })
-    return Promise.all([commentCount, articles]).then((result) => {
-        return result
-    }).then((result) => {
-        const allCommentsCount = result[0]
-        const allArticles = result[1]
-        allArticles.forEach((article) => {
-            article.comment_count = 0
-            allCommentsCount.forEach((commentcount) => {
-                if (article.article_id === commentcount.article_id) {
-                    article.comment_count = Number(commentcount.count)
-                }
-                return article
-            })
-            return article
-        })
-        return allArticles
     })
 }
