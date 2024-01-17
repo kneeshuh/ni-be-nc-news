@@ -5,7 +5,6 @@ const testData = require('../db/data/test-data/index')
 const fs = require('fs/promises')
 const allEndpoints = require('../endpoints.json')
 const app = require('../app')
-const { brotliDecompressSync } = require('zlib')
 
 beforeEach(() => {
     return seed(testData)
