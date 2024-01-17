@@ -19,14 +19,13 @@ exports.getCommentsByArticleId = (req, res, next) => {
     })
 }
 
-// exports.postCommentById = (req, res, next) => {
-//     const newComment = req.body;
-//     const { article_id } = req.params;
-//     console.log(newComment, '<-- comment in controller')
-//     insertCommentById(newComment, article_id).then((comment) => {
-//         res.status(201).send({ comment })
-//     })
-//     .catch((err) => {
-//         next(err)
-//     })
-// }
+exports.postCommentById = (req, res, next) => {
+    const newComment = req.body;
+    const { article_id } = req.params;
+    insertCommentById(newComment, article_id).then((comment) => {
+        res.status(201).send({ comment })
+    })
+    .catch((err) => {
+        next(err)
+    })
+}
