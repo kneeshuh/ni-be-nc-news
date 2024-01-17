@@ -67,14 +67,14 @@ describe('/api/articles/:article_id', () => {
             expect(article).toHaveProperty('article_img_url')
         })
     })
-    test('404: sends appropriate error status and message when given valid but non-existent article_id', () => {
+    test('GET: 404 sends appropriate error status and message when given valid but non-existent article_id', () => {
         return request(app).get('/api/articles/25')
         .expect(404)
         .then(({ body }) => {
             expect(body.msg).toBe('not found')
         })
     })
-    test('400: send appropriate error status and message when given invalid article_id', () => {
+    test('GET: 400 send appropriate error status and message when given invalid article_id', () => {
         return request(app).get('/api/articles/not-an-article-id')
         .expect(400)
         .then(({ body }) => {
