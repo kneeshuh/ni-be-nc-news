@@ -113,6 +113,16 @@ describe('/api/articles/:article_id', () => {
             expect(body.msg).toBe('bad request')
         })
     })
+    test('GET: 200 sends all articles with specified id, with comment counts for those articles', () => {
+        return request(app).get('/api/articles/1')
+        .expect(200)
+        .then(({ body }) => {
+            const { article } = body
+            expect(article.article_id).toBe(1)
+            expect(article).toHaveProperty('comment_count')
+            expect(article.comment_count).toBe('11')
+        })
+    })
 })
 
 describe('/api/articles', () => {
