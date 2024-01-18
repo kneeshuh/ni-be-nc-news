@@ -236,7 +236,7 @@ describe('/api/comments/:comment_id', () => {
     })
 })
 
-describe.only('/api/users', () => {
+describe('/api/users', () => {
     test('GET: 200 responds with an array of user objects, with relevant properties', () => {
         return request(app).get('/api/users')
         .expect(200)

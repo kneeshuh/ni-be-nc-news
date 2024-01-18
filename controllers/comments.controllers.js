@@ -40,7 +40,6 @@ exports.postCommentById = (req, res, next) => {
 
 exports.deleteCommentById = (req, res, next) => {
     const { comment_id } = req.params;
-    console.log(comment_id)
     const removeCommentQuery = removeCommentById(comment_id)
     const queries = [removeCommentQuery]
     if (comment_id) {
