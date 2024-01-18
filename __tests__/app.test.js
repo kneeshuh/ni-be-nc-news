@@ -168,9 +168,9 @@ describe('/api/articles', () => {
             })
         })
     })
-    test('GET: 400 QUERY responds with appropriate error status and message if given invalid topic query', () => {
+    test('GET: 404 QUERY responds with appropriate error status and message if given invalid topic query', () => {
         return request(app).get('/api/articles?topic=not-a-topic')
-        .expect(400)
+        .expect(404)
         .then(({ body }) => {
             expect(body.msg).toBe('invalid topic query')
         })

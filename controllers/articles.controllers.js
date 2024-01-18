@@ -21,7 +21,7 @@ exports.getAllArticles = (req, res, next) => {
             next(err)
         })
     } else if (!validTopicQueries.includes(topic)) {
-        return Promise.reject({ status: 400, msg: 'invalid topic query'})
+        return Promise.reject({ status: 404, msg: 'invalid topic query'})
         .catch((err) => {
             next (err)
         })
