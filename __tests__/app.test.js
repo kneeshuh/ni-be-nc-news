@@ -219,6 +219,9 @@ describe('/api/comments/:comment_id', () => {
     test('DELETE: 204 responds with appropriate status code and no content', () => {
         return request(app).delete('/api/comments/18')
         .expect(204)
+        .then(({ body }) => {
+            expect(body).toEqual({})
+        })
     })
     test('DELETE: 404 responds with appropriate error message if given valid but non-existent comment_id', () => {
         return request(app).delete('/api/comments/25')
