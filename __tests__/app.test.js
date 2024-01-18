@@ -218,23 +218,23 @@ describe('/api/articles/:article_id/comments', () => {
             expect(body.msg).toBe('bad request')
         })
     })
-    test('POST: 201 inserts comment and return with newly added comment', () => {
+    test('POST: 201 inserts comment and return with newly added comment when given existing username', () => {
         return request(app).post('/api/articles/2/comments')
         .send({
-            username: 'user',
+            username: 'icellusedkars',
             body: 'comment text'
         })
         .expect(201)
         .then(({ body }) => {
             const { comment } =  body
-            expect(comment.author).toBe('user')
+            expect(comment.author).toBe('icellusedkars')
             expect(comment.body).toBe('comment text')
         })
     })
     test('POST: 400 sends appropriate error status and message when given invalid article_id', () => {
         return request(app).post('/api/articles/not-an-article-id/comments')
         .send({
-            username: 'user',
+            username: 'icellusedkars',
             body: 'comment text'
         })
         .expect(400)
@@ -246,6 +246,17 @@ describe('/api/articles/:article_id/comments', () => {
         return request(app).post('/api/articles/25/comments')
         .send({
             username: 'user',
+            body: 'comment text'
+        })
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.msg).toBe('not found')
+        })
+    })
+    test('POST: 404 send appropriate error status and message when given username that doesn\'t exist', () => {
+        return request(app).post('/api/articles/1/comments')
+        .send({
+            username: 'not-a-user',
             body: 'comment text'
         })
         .expect(404)
