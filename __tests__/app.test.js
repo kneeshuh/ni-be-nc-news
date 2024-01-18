@@ -264,6 +264,17 @@ describe('/api/articles/:article_id/comments', () => {
             expect(body.msg).toBe('not found')
         })
     })
+    test('POST: 400 send appropriate error status and message when properties are missing in request body', () => {
+        return request(app).post('/api/articles/2/comments')
+        .send({
+            username: 'icellusedkars'
+        })
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.msg).toBe('bad request - violates not null constraint')
+        })
+
+    })
 })
 
 describe('/api/comments/:comment_id', () => {
