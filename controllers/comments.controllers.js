@@ -1,5 +1,6 @@
 const { fetchCommentsByArticleId, insertCommentById, removeCommentById } = require('../models/comments.models')
 const { checkArticleIdExists, checkCommentIdExists } = require('../utils/check-id-exists')
+const { checkUserExists } = require('../utils/check-user-exists')
 
 exports.getCommentsByArticleId = (req, res, next) => {
     const { article_id } = req.params
@@ -27,6 +28,10 @@ exports.postCommentById = (req, res, next) => {
     if (article_id) {
         const articleIdExistsQuery = checkArticleIdExists(article_id)
         queries.push(articleIdExistsQuery)
+    }
+    if (newComment) {
+        const userExistsQuery = checkUserExists(newComment.username)
+        queries.push(userExistsQuery)
     }
     Promise.all(queries)
     .then((response) => {

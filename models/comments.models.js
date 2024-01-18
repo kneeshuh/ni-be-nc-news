@@ -9,12 +9,8 @@ exports.fetchCommentsByArticleId = (article_id) => {
 }
 
 exports.insertCommentById = (newComment, article_id) => {
-    return db.query(`INSERT INTO users (username, name) VALUES ($1, $2) RETURNING *`, 
-    [newComment.username, newComment.username])
-    .then(() => {
         return db.query(`INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *`,
         [newComment.username, newComment.body, article_id])
-    })
     .then(({ rows }) => {
         return rows[0]
     })

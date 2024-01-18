@@ -57,6 +57,14 @@ app.use((err, req, res, next) => {
 })
 
 app.use((err, req, res, next) => {
+    if (err.code === '23502') {
+        res.status(400).send({msg: 'bad request - violates not null constraint'})
+    } else {
+        next(err)
+    }
+})
+
+app.use((err, req, res, next) => {
     if (err) {
         console.log(err)
     } else {
