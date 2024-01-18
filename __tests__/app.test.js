@@ -5,7 +5,6 @@ const testData = require('../db/data/test-data/index')
 const fs = require('fs/promises')
 const allEndpoints = require('../endpoints.json')
 const app = require('../app')
-const { brotliDecompressSync } = require('zlib')
 
 beforeEach(() => {
     return seed(testData)
@@ -212,6 +211,30 @@ describe('/api/articles/:article_id/comments', () => {
         .expect(404)
         .then(({ body }) => {
             expect(body.msg).toBe('not found')
+        })
+    })
+})
+
+describe('/api/comments/:comment_id', () => {
+    test('DELETE: 204 responds with appropriate status code and no content', () => {
+        return request(app).delete('/api/comments/18')
+        .expect(204)
+        .then(({ body }) => {
+            expect(body).toEqual({})
+        })
+    })
+    test('DELETE: 404 responds with appropriate error message if given valid but non-existent comment_id', () => {
+        return request(app).delete('/api/comments/25')
+        .expect(404)
+        .then(({ body }) => {
+            expect(body.msg).toBe('not found')
+        })
+    })
+    test('DELETE: 400 responds with appropriate error message if given invalid id', () => {
+        return request(app).delete('/api/comments/non-a-comment-id')
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.msg).toBe('bad request')
         })
     })
 })
