@@ -4,7 +4,7 @@ const app = express()
 
 const { getAllTopics } = require('./controllers/topics.controllers')
 const { getApi } = require('./controllers/api.controllers')
-const { getArticleById, getAllArticles } = require('./controllers/articles.controllers')
+const { getArticleById, getAllArticles, patchVotesByArticleId } = require('./controllers/articles.controllers')
 const { getCommentsByArticleId, postCommentById } = require('./controllers/comments.controllers')
 
 app.use(express.json())
@@ -20,6 +20,8 @@ app.get('/api/articles', getAllArticles)
 app.get('/api/articles/:article_id/comments', getCommentsByArticleId)
 
 app.post('/api/articles/:article_id/comments', postCommentById)
+
+app.patch('/api/articles/:article_id', patchVotesByArticleId)
 
 app.all('*', (req, res) => {
     res.status(404).send({msg: 'not found'})

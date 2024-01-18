@@ -69,6 +69,12 @@
     "POST /api/articles/:article_id/comments": {
       "description": "adds a comment for a specific article, responds with the posted comment",
       "queries": [],
+      "requestBodyFormat": [
+        {
+          "username": "user",
+          "body": "comment text"
+        }
+      ],
       "exampleResponse": [
         {
           "comment_id": 19,
@@ -77,6 +83,27 @@
           "author": "user",
           "votes": 0,
           "created_at": "2020-01-17T11:55:26.366Z"
+        }
+      ]
+    },
+    "PATCH /api/articles/:article_id": {
+      "description": "updates article votes by amount given in request body",
+      "queries": [],
+      "requestBodyFormat": [
+        {
+          "inc_votes": -99
+        }
+      ],
+      "exampleResponse": [
+        {
+          "article_id": 3,
+          "title": "Eight pug gifs that remind me of mitch",
+          "topic": "mitch",
+          "author": "icellusedkars",
+          "body":"some gifs",
+          "created_at": "2020-11-03T09:12:00.000Z",
+          "votes": -99,
+          "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
         }
       ]
     }
