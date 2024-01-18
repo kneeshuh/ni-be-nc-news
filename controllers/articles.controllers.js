@@ -11,12 +11,28 @@ exports.getArticleById = (req, res, next) => {
 }
 
 exports.getAllArticles = (req, res, next) => {
-    fetchAllArticles().then((articles) => {
-        res.status(200).send({ articles })
-    })
-    .catch((err) => {
-        next(err)
-    })
+    const { topic } = req.query;
+    const validTopicQueries = ['cats', 'mitch']
+    if (!topic) {
+        fetchAllArticles().then((articles) => {
+            res.status(200).send({ articles })
+        })
+        .catch((err) => {
+            next(err)
+        })
+    } else if (!validTopicQueries.includes(topic)) {
+        return Promise.reject({ status: 400, msg: 'invalid topic query'})
+        .catch((err) => {
+            next (err)
+        })
+    } else {
+        fetchAllArticles(topic).then((articles) => {
+            res.status(200).send({ articles })
+        })
+        .catch((err) => {
+            next(err)
+        })
+    }
 }
 
 exports.patchVotesByArticleId = (req, res, next) => {
