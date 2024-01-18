@@ -1,4 +1,3 @@
-const { all } = require('../app')
 const db = require('../db/connection')
 
 exports.fetchArticleById = (article_id) => {
