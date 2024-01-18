@@ -135,6 +135,36 @@ describe('/api/articles', () => {
             })
         })
     })
+    test('GET: 200 QUERY responds with array of articles for specific query cats', () => {
+        return request(app).get('/api/articles?topic=cats')
+        .expect(200)
+        .then(({ body }) => {
+            const { articles } = body
+            expect(articles.length).toBe(1)
+            articles.forEach((article) => {
+                expect(article.topic).toBe('cats')
+            })
+
+        })
+    })
+    test('GET: 200 QUERY responds with array of articles for specific query mitch', () => {
+        return request(app).get('/api/articles?topic=mitch')
+        .expect(200)
+        .then(({ body }) => {
+            const { articles } = body
+            expect(articles.length).toBe(12)
+            articles.forEach((article) => {
+                expect(article.topic).toBe('mitch')
+            })
+        })
+    })
+    test('GET: 400 QUERY responds with appropriate error status and message if given invalid topic query', () => {
+        return request(app).get('/api/articles?topic=not-a-topic')
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.msg).toBe('invalid topic query')
+        })
+    })
 })
 
 describe('/api/articles/:article_id/comments', () => {
