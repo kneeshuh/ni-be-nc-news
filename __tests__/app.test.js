@@ -191,13 +191,22 @@ describe('/api/articles', () => {
             expect(body.msg).toBe('bad request - invalid sort_by query')
         })
     })
-    test('GET: 200 responds with array of articles sorted by valid sort_by query', () => {
-        return request(app).get('/api/articles?sort_by=comment_count')
+    test('GET: 200: responds with an array of articles appropriately sorted and ordered by queries given', () => {
+        return request(app).get('/api/articles?sort_by=votes&order=ASC')
         .expect(200)
         .then(({ body }) => {
             const { articles } = body
-            console.log(articles)
             expect(articles.length).toBe(13)
+            expect(articles).toBeSortedBy('votes', { descending: false })
+        })
+    })
+    test('GET: 200: responds with an array of articles appropriately sorted and ordered by queries given', () => {
+        return request(app).get('/api/articles?sort_by=created_at&order=ASC')
+        .expect(200)
+        .then(({ body }) => {
+            const { articles } = body
+            expect(articles.length).toBe(13)
+            expect(articles).toBeSortedBy('created_at', { descending: false })
         })
     })
 })
