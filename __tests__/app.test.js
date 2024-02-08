@@ -209,6 +209,13 @@ describe('/api/articles', () => {
             expect(articles).toBeSortedBy('created_at', { descending: false })
         })
     })
+    test('GET: 400: responds with appropriate error status and msg if given invalid order by query', () => {
+        return request(app).get('/api/articles?sort_by=votes&order=nonsense')
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.msg).toBe('bad request - invalid order query')
+        })
+    })
 })
 
 describe('/api/articles/:article_id/comments', () => {
