@@ -13,12 +13,12 @@ exports.fetchArticleById = (article_id) => {
     })
 }
 
-exports.fetchAllArticles = (topic) => {
+exports.fetchAllArticles = (topic = '', sort_by = 'created_at') => {
     if (!topic) {
         return db.query(`SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.article_id) AS comment_count FROM articles
         LEFT JOIN comments on comments.article_id = articles.article_id
         GROUP BY articles.article_id
-        ORDER BY articles.created_at DESC;`)
+        ORDER BY articles.${sort_by} DESC;`)
         .then(({ rows }) => {
             return rows
         })
@@ -27,7 +27,7 @@ exports.fetchAllArticles = (topic) => {
         LEFT JOIN comments on comments.article_id = articles.article_id
         WHERE articles.topic = $1
         GROUP BY articles.article_id
-        ORDER BY articles.created_at DESC;`,
+        ORDER BY articles.${sort_by} DESC;`,
         [topic])
         .then(({ rows }) => {
             return rows

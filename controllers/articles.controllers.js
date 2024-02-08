@@ -12,14 +12,14 @@ exports.getArticleById = (req, res, next) => {
 }
 
 exports.getAllArticles = (req, res, next) => {
-    const { topic } = req.query;
+    const { topic, sort_by } = req.query;
     const queries = []
     if (!topic) {
-        const fetchArticlesQuery = fetchAllArticles()
+        const fetchArticlesQuery = fetchAllArticles(topic, sort_by)
         queries.push(fetchArticlesQuery)
     }
     if (topic) {
-        const fetchArticlesWithTopicQuery = fetchAllArticles(topic)
+        const fetchArticlesWithTopicQuery = fetchAllArticles(topic, sort_by)
         queries.push(fetchArticlesWithTopicQuery)
         const topicExistsQuery = checkTopicExists(topic)
         queries.push(topicExistsQuery)
