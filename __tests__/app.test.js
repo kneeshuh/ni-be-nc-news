@@ -216,6 +216,18 @@ describe('/api/articles', () => {
             expect(body.msg).toBe('bad request - invalid order query')
         })
     })
+    test('GET: 200 responds with articles of specified topic in correct order by query order', () => {
+        return request(app).get('/api/articles?topic=mitch&sort_by=votes&order=ASC')
+        .expect(200)
+        .then(({ body }) => {
+            const { articles } = body
+            expect(articles.length).toBe(12)
+            expect(articles).toBeSortedBy('votes', { descending: false })
+            articles.forEach((article) => {
+                expect(article.topic).toBe('mitch')
+            })
+        })
+    })
 })
 
 describe('/api/articles/:article_id/comments', () => {

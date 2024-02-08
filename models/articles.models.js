@@ -27,7 +27,7 @@ exports.fetchAllArticles = (topic = '', sort_by = 'created_at', order = 'DESC') 
         LEFT JOIN comments on comments.article_id = articles.article_id
         WHERE articles.topic = $1
         GROUP BY articles.article_id
-        ORDER BY articles.${sort_by} ${order};`,
+        ORDER BY ${sort_by} ${order};`,
         [topic])
         .then(({ rows }) => {
             return rows
