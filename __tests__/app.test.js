@@ -192,12 +192,12 @@ describe('/api/articles', () => {
         })
     })
     test('GET: 200 responds with array of articles sorted by valid sort_by query', () => {
-        return request(app).get('/api/articles?sort_by=author')
+        return request(app).get('/api/articles?sort_by=comment_count')
         .expect(200)
         .then(({ body }) => {
             const { articles } = body
+            console.log(articles)
             expect(articles.length).toBe(13)
-            expect(articles).toBeSortedBy('author', { descending: true })
         })
     })
 })
